@@ -95,6 +95,14 @@ Genre carries the most weight because it acts as a hard filter — getting the w
 
 ![Screenshot of recommendations](image.png)
 
+### Normal Outputs
+
+![outputs1](image-1.png)
+
+### Edge Cases
+
+![edge cases](image-2.png)
+
 ---
 
 ## Getting Started

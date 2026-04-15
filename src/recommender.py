@@ -66,22 +66,31 @@ def load_songs(csv_path: str) -> List[Dict]:
             })
     return songs
 
+# Scoring weights — adjust here to experiment with balance.
+# Original: GENRE=2.0, MOOD=1.0, ENERGY=1.0  (max score 4.0)
+# Current:  halved genre, doubled energy      (max score still 4.0)
+GENRE_WEIGHT  = 1.0   # was 2.0
+MOOD_WEIGHT   = 1.0
+ENERGY_WEIGHT = 2.0   # was 1.0 (implicit)
+
+
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     """Return a (score, reasons) tuple rating how well a song matches user preferences."""
     score = 0.0
     reasons = []
 
     if song["genre"] == user_prefs["favorite_genre"]:
-        score += 2.0
-        reasons.append(f"genre match (+2.0)")
+        score += GENRE_WEIGHT
+        reasons.append(f"genre match (+{GENRE_WEIGHT})")
 
     if song["mood"] == user_prefs["favorite_mood"]:
-        score += 1.0
-        reasons.append(f"mood match (+1.0)")
+        score += MOOD_WEIGHT
+        reasons.append(f"mood match (+{MOOD_WEIGHT})")
 
     energy_similarity = 1.0 - abs(user_prefs["target_energy"] - song["energy"])
-    score += energy_similarity
-    reasons.append(f"energy similarity (+{energy_similarity:.2f})")
+    weighted_energy = ENERGY_WEIGHT * energy_similarity
+    score += weighted_energy
+    reasons.append(f"energy similarity (+{weighted_energy:.2f})")
 
     return (score, reasons)
 
